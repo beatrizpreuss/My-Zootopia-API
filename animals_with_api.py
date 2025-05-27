@@ -1,4 +1,5 @@
 import requests
+from numpy.ma.core import empty
 
 API_KEY = 'tX+p7IesWxHN16/NqL2HRg==GrkHAE4JXFrM96K8'
 ANIMAL_URL = 'https://api.api-ninjas.com/v1/animals?name='
@@ -40,6 +41,8 @@ def get_info(user_animal):
                        f"</li>")
         except KeyError:
             continue
+    if output == "":
+        output += f"<h2 text-align: center>The animal {user_animal} doesn't exist.<h2>"
     return output
 
 
