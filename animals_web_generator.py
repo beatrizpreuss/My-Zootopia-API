@@ -1,19 +1,9 @@
-import requests
-
-
-API_KEY = 'tX+p7IesWxHN16/NqL2HRg==GrkHAE4JXFrM96K8'
-ANIMAL_URL = 'https://api.api-ninjas.com/v1/animals?name='
+import data_fetcher
 
 
 def get_user_input():
     user_animal = input("Enter a name of an animal: ")
     return user_animal
-
-
-def get_animals_from_api(user_animal):
-    res = requests.get(f'{ANIMAL_URL}{user_animal}', headers={'X-Api-Key': API_KEY})
-    animals_resp = res.json()
-    return animals_resp
 
 
 def get_html(html_file):
@@ -26,7 +16,7 @@ def get_info(user_animal):
     """ Gets information about each animal in the json file """
     # animals_data = load_data('animals_resp.json')
     output = ""
-    info_from_api = get_animals_from_api(user_animal)
+    info_from_api = data_fetcher.fetch_data(user_animal)
     for animal in info_from_api:
         try:
             output += (f'<li class="cards__item">'
