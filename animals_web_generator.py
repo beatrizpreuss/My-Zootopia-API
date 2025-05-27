@@ -2,6 +2,7 @@ import data_fetcher
 
 
 def get_user_input():
+    """Lets user choose animal of interest"""
     user_animal = input("Enter a name of an animal: ")
     return user_animal
 
@@ -13,7 +14,7 @@ def get_html(html_file):
 
 
 def get_info(user_animal):
-    """ Gets information about each animal in the json file """
+    """ Gets information about each animal returned from the API """
     # animals_data = load_data('animals_resp.json')
     output = ""
     info_from_api = data_fetcher.fetch_data(user_animal)
