@@ -1,19 +1,10 @@
-import requests
-from numpy.ma.core import empty
-
-API_KEY = 'tX+p7IesWxHN16/NqL2HRg==GrkHAE4JXFrM96K8'
-ANIMAL_URL = 'https://api.api-ninjas.com/v1/animals?name='
+import json
 
 
-def get_user_input():
-    user_animal = input("Enter a name of an animal: ")
-    return user_animal
-
-
-def get_animals_from_api(user_animal):
-    res = requests.get(f'{ANIMAL_URL}{user_animal}', headers={'X-Api-Key': API_KEY})
-    animals_resp = res.json()
-    return animals_resp
+def load_data(file_path):
+    """ Loads a JSON file """
+    with open(file_path, "r", encoding="utf-8") as handle:
+        return json.load(handle)
 
 
 def get_html(html_file):
@@ -22,12 +13,11 @@ def get_html(html_file):
     return html.read()
 
 
-def get_info(user_animal):
+def get_info():
     """ Gets information about each animal in the json file """
-    # animals_data = load_data('animals_resp.json')
+    animals_data = load_data('animals_data.json')
     output = ""
-    info_from_api = get_animals_from_api(user_animal)
-    for animal in info_from_api:
+    for animal in animals_data:
         try:
             output += (f'<li class="cards__item">'
                        f'<div class="card__title">{animal["name"]}</div>\n'
@@ -41,33 +31,28 @@ def get_info(user_animal):
                        f"</li>")
         except KeyError:
             continue
-    if output == "":
-        output += f"<h2 text-align: center>The animal {user_animal} doesn't exist.<h2>"
     return output
 
 
-def replace_info(user_animal):
+def replace_info():
     """ Replaces the placeholder in the original html with the
     information about the animals """
     original_html = get_html("animals_template.html")
-    animals_info = get_info(user_animal)
+    animals_info = get_info()
     new_html = original_html.replace("__REPLACE_ANIMALS_INFO__", animals_info)
     return new_html
 
 
-def write_html(user_animal):
+def write_html():
     """ Writes a new html file with the replaced information """
-    info = replace_info(user_animal)
+    info = replace_info()
     with open("animals.html", "w") as new_html:
         new_html.write(info)
 
 
 def main():
-    user_animal = get_user_input()
-    write_html(user_animal)
-    print("Website was successfully generated to the file animals.html")
+    write_html()
 
 
 if __name__ == "__main__":
     main()
-
